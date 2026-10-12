@@ -1,0 +1,22 @@
+# Nooit persoonlijke financiële data committen
+data/
+work/
+config/
+rapport/
+demo*/
+*.csv
+*.STA
+*.940
+*.TAB
+*.pdf
+*.xlsx
+.env
+# Python / OS
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+# Pakketten horen in GitHub Releases, niet in de repo
+dist/
+*.skill
+*.zip

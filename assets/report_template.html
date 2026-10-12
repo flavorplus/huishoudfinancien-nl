@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Financieel overzicht</title>
+<style>
+:root{color-scheme:light;--bg:#f6f5f2;--s1:#fcfcfb;--s2:#f0efec;--border:#e2e0da;--t1:#0b0b0b;--t2:#52514e;--t3:#7a7873;--c1:#2a78d6;--c2:#eb6834;--c3:#1baf7a;--pos:#2a78d6;--neg:#e34948;--grid:#e8e6e1;--good:#0ca30c;--warn:#b07800;--bad:#d03b3b;--wash:#e6f0fb}
+@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){color-scheme:dark;--bg:#121211;--s1:#1a1a19;--s2:#242422;--border:#34332f;--t1:#fff;--t2:#c3c2b7;--t3:#8f8e86;--c1:#3987e5;--c2:#d95926;--c3:#199e70;--pos:#3987e5;--neg:#e66767;--grid:#2c2c29;--warn:#fab219;--wash:#1d2a3b}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#121211;--s1:#1a1a19;--s2:#242422;--border:#34332f;--t1:#fff;--t2:#c3c2b7;--t3:#8f8e86;--c1:#3987e5;--c2:#d95926;--c3:#199e70;--pos:#3987e5;--neg:#e66767;--grid:#2c2c29;--warn:#fab219;--wash:#1d2a3b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--t1);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--c1)}h1{font-size:26px;margin:0 0 4px}h2{font-size:21px;margin:0 0 12px}h3{font-size:16px;margin:20px 0 8px}p{margin:0 0 10px}
+.layout{display:grid;grid-template-columns:310px minmax(0,1fr);gap:24px;max-width:1320px;margin:0 auto;padding:24px}
+header{grid-column:1/-1;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-end}
+aside{position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow:auto;background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:16px}
+main{min-width:0}section{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:20px 22px;margin-bottom:20px}
+.muted{color:var(--t3)}.sec{color:var(--t2)}nav a{font-size:13px;text-decoration:none;padding:4px 10px;border:1px solid var(--border);border-radius:999px;color:var(--t2);background:var(--s1);margin:0 4px 4px 0;display:inline-block}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px;margin:12px 0}.tile{background:var(--s2);border-radius:10px;padding:12px 14px}
+.tile .l{font-size:13px;color:var(--t2)}.tile .v{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums}.tile .d{font-size:12px;color:var(--t3)}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--grid);vertical-align:top}th{font-size:13px;color:var(--t2)}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}tr.sum td{font-weight:600;border-top:2px solid var(--border)}tr.grp td{background:var(--s2);font-weight:600;font-size:13px}
+.tw{overflow-x:auto}.ctl{margin-bottom:12px}.ctl label{display:flex;justify-content:space-between;gap:8px;font-size:13px;color:var(--t2)}.ctl label b{color:var(--t1);font-variant-numeric:tabular-nums}
+.ctl input[type=range]{width:100%;accent-color:var(--c1)}aside h3{margin:14px 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--t3)}
+.btns{display:flex;gap:6px;flex-wrap:wrap}.btns button,#theme{font:inherit;font-size:12px;padding:3px 9px;border-radius:6px;border:1px solid var(--border);background:var(--s2);color:var(--t1);cursor:pointer}.btns button.on{border-color:var(--c1);background:var(--wash)}
+.chk{display:flex;gap:8px;font-size:13px;color:var(--t2);margin:6px 0}.callout{border-left:3px solid var(--c1);background:var(--wash);padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0}
+.flag{display:inline-flex;gap:4px;font-size:12px;font-weight:600;padding:1px 8px;border-radius:999px;border:1px solid currentColor}.flag.good{color:var(--good)}.flag.warn{color:var(--warn)}.flag.bad{color:var(--bad)}.flag.info{color:var(--t2)}
+.unc{font-size:11px;padding:0 6px;border-radius:999px;background:var(--s2);color:var(--t2)}.legend{display:flex;gap:14px;font-size:13px;color:var(--t2);margin:6px 0}.legend i{width:12px;height:12px;border-radius:3px;display:inline-block;margin-right:6px;vertical-align:-1px}
+svg text{fill:var(--t2);font-size:12px}svg .val{fill:var(--t1);font-weight:600}svg .grid{stroke:var(--grid)}svg .hit{fill:transparent}
+#tip{position:fixed;pointer-events:none;background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:13px;box-shadow:0 4px 16px rgba(0,0,0,.12);display:none;z-index:50;max-width:280px}#tip b{display:block;font-size:15px}
+ul.f{list-style:none;padding:0}ul.f li{padding:10px 0;border-bottom:1px solid var(--grid)}summary{cursor:pointer;color:var(--t2)}
+.psum{display:none;font-weight:600}
+@media (max-width:960px){.layout{grid-template-columns:1fr;padding:16px}aside{position:static;max-height:none}.psum{display:list-item}}
+@media print{aside{display:none}.layout{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="layout">
+<header><div><h1 id="title">Financieel overzicht</h1><div class="muted" id="sub"></div>
+<nav id="nav"></nav></div><button id="theme" type="button">Licht/donker</button></header>
+<aside><details id="pd" open><summary class="psum">Scenario-instellingen</summary>
+  <h3>Risicoprofiel</h3><div class="btns" id="profiles"><button data-p="voorzichtig">Voorzichtig</button><button data-p="realistisch">Realistisch</button><button data-p="optimistisch">Optimistisch</button></div>
+  <div class="muted" style="font-size:12px;margin:4px 0 8px" id="phint"></div>
+  <h3>Inkomen</h3><div id="ctlPersons"></div>
+  <div class="ctl"><label>Belastingjaar <b id="vYear"></b></label><div class="btns" data-for="year"><button data-v="2026">2026</button><button data-v="2027">2027 (voorlopig)</button></div><input type="hidden" id="year" value="2026"></div>
+  <div id="ctlKids"></div>
+  <div id="ctlHouse"></div>
+  <h3>Onzekerheden</h3>
+  <div class="ctl"><label for="spend">Uitgaven t.o.v. begroting <b id="vSpend"></b></label><input type="range" id="spend" min="-600" max="800" step="10" value="0"></div>
+  <div class="ctl"><label for="buf">Buffer-opbouw per maand <b id="vBuf"></b></label><input type="range" id="buf" min="0" max="1500" step="50" value="200"></div>
+  <p class="muted" style="font-size:12px">Bedragen per maand tenzij anders vermeld.</p>
+</details></aside>
+<main>
+<section id="samenvatting"><h2>Samenvatting</h2><div class="tiles" id="kpis"></div><div id="nSamen"></div></section>
+<section id="h1"><h2>1 · Inkomsten en uitgaven</h2><div class="tiles" id="t1"></div><div id="nH1"></div>
+  <h3>Saldo per maand</h3><div class="legend"><span><i style="background:var(--pos)"></i>overschot</span><span><i style="background:var(--neg)"></i>tekort</span></div><div id="cSaldo"></div>
+  <h3>Waar het geld heen gaat (gemiddeld per maand)</h3><div id="cCats"></div>
+  <details><summary>Tabel per categorie per maand</summary><div class="tw" id="tCat"></div></details>
+  <h3>Terugkerende betalingen</h3><div class="tw" id="tRec"></div></section>
+<section id="h2"><h2>2 · Gezamenlijke rekening en verdeelsleutel</h2><div id="nH2"></div>
+  <h3>Wat de gezamenlijke rekening nodig heeft</h3><div class="tw" id="tBud"></div>
+  <div id="keysWrap"><h3>Verdeelsleutels</h3><div class="legend" id="kLeg"></div><div id="cKeys"></div><div class="tw" id="tKeys"></div></div></section>
+<section id="h3"><h2>3 · Nieuwe woning</h2><div class="tiles" id="t3"></div><div id="st3"></div><div id="nH3"></div>
+  <h3>Financiering</h3><div class="tw" id="tFin"></div><h3>Totaalplaatje met nieuwe woning</h3><div class="tw" id="tNew"></div><h3>Stresstest</h3><div class="tw" id="tStress"></div></section>
+<section id="zek"><h2>Hoe zeker is dit?</h2><p class="sec">De rekenregels zijn officieel en getoetst aan jullie loonstroken. De onzekerheid zit in aannames over de toekomst. Hieronder dezelfde keuzes in drie risicoprofielen.</p><div class="tw" id="tProf"></div></section>
+<section id="h4"><h2>4 · Scenario's</h2><div class="tw" id="tScen"></div></section>
+<section id="h5"><h2>5 · Overige opvallende zaken</h2><ul class="f" id="fnd"></ul></section>
+<section id="bijlage"><h2>Aannames, controle en bronnen</h2><div id="nAann"></div><h3>Datacontrole</h3><pre id="chk" style="white-space:pre-wrap;font-size:12px;background:var(--s2);padding:10px;border-radius:8px"></pre><h3>Bronnen regels</h3><ul id="src" style="font-size:13px"></ul>
+  <p class="muted" style="font-size:12px">Eigen analyse op basis van eigen bankdata en publieke regels. Geen persoonlijk financieel, fiscaal of beleggingsadvies; laat hypotheek en verzekeringen toetsen door een onafhankelijk adviseur.</p></section>
+</main></div><div id="tip"></div>
+<script>const DATA = __DATA__;</script>
+<script>__MODEL__</script>
+<script>
+(function(){
+const {rules, cfg, A, N, checks} = DATA; const M = makeModel({rules, cfg, A});
+const $ = id => document.getElementById(id), nf = new Intl.NumberFormat('nl-NL', {maximumFractionDigits: 0});
+const eur = x => (x < 0 ? '−€ ' : '€ ') + nf.format(Math.abs(Math.round(x)));
+const k = x => (x < 0 ? '−' : '') + '€ ' + (Math.abs(x) >= 1e6 ? (Math.abs(x) / 1e6).toLocaleString('nl-NL', {maximumFractionDigits: 2}) + ' mln' : nf.format(Math.round(Math.abs(x) / 1000)) + 'k');
+const pct = (x, d = 0) => (x * 100).toLocaleString('nl-NL', {maximumFractionDigits: d, minimumFractionDigits: d}) + '%';
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+const flag = (c, t) => `<span class="flag ${c}">${c === 'good' ? '✓' : c === 'bad' ? '✕' : c === 'warn' ? '!' : 'i'} ${esc(t)}</span>`;
+const unc = z => z ? `<span class="unc">${z === 'hoog' ? 'zeker' : z === 'midden' ? 'redelijk zeker' : 'aanname'}</span>` : '';
+const P = cfg.huishouden.personen, KIDS = cfg.huishouden.kinderen || [], G = (cfg.doelen || {}).nieuwe_woning || {}, house = !!G.actief, W = cfg.woning || {};
+// ---------------------------------------------------------------- tooltip + svg
+const tip = $('tip');
+function bind(root){ root.querySelectorAll('[data-tip]').forEach(el => { el.addEventListener('pointermove', e => { tip.innerHTML = el.dataset.tip; tip.style.display = 'block'; tip.style.left = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 8) + 'px'; tip.style.top = Math.min(e.clientY + 14, innerHeight - tip.offsetHeight - 8) + 'px'; }); el.addEventListener('pointerleave', () => tip.style.display = 'none'); }); }
+const nice = v => { const p = Math.pow(10, Math.floor(Math.log10(v || 1))); for (const m of [1, 2, 2.5, 5, 10]) if (m * p >= v) return m * p; return 10 * p; };
+function bar(x, y, w, h, r, dir){ r = Math.min(r, (dir === 'right' ? h : w) / 2, Math.abs(dir === 'right' ? w : h));
+  if (dir === 'right') return `M${x},${y}h${w - r}q${r},0 ${r},${r}v${h - 2 * r}q0,${r} ${-r},${r}h${-(w - r)}z`;
+  if (dir === 'up') return `M${x},${y + h}v${-(h - r)}q0,${-r} ${r},${-r}h${w - 2 * r}q${r},0 ${r},${r}v${h - r}z`;
+  return `M${x},${y}v${h - r}q0,${r} ${r},${r}h${w - 2 * r}q${r},0 ${r},${-r}v${-(h - r)}z`; }
+function cols(el, labels, vals, tipf){ const Wd = Math.max(320, el.clientWidth || 700), H = 220, pl = 56, pb = 28, pt = 12, mx = nice(Math.max(...vals.map(Math.abs), 1)), y0 = pt + (H - pt - pb) / 2, sc = (H - pt - pb) / 2 / mx, band = (Wd - pl - 8) / labels.length, bw = Math.min(24, band * .6);
+  let s = `<svg viewBox="0 0 ${Wd} ${H}" width="100%" role="img">`; for (const t of [-mx, 0, mx]) { const yy = y0 - t * sc; s += `<line class="grid" x1="${pl}" x2="${Wd - 4}" y1="${yy}" y2="${yy}"/><text x="${pl - 6}" y="${yy + 4}" text-anchor="end">${(t / 1000).toLocaleString('nl-NL', {maximumFractionDigits: 1})}k</text>`; }
+  labels.forEach((l, i) => { const v = vals[i], x = pl + i * band + (band - bw) / 2, h = Math.abs(v) * sc; s += `<g data-tip="${esc(tipf(i))}"><rect class="hit" x="${pl + i * band}" y="${pt}" width="${band}" height="${H - pt - pb}"/><path d="${v >= 0 ? bar(x, y0 - h, bw, h, 4, 'up') : bar(x, y0, bw, h, 4, 'down')}" fill="${v >= 0 ? 'var(--pos)' : 'var(--neg)'}"/></g><text x="${pl + i * band + band / 2}" y="${H - 8}" text-anchor="middle">${esc(l)}</text>`; });
+  el.innerHTML = s + '</svg>'; bind(el); }
+function hbars(el, rows, colors){ const Wd = Math.max(320, el.clientWidth || 700), rh = 28, pl = Math.min(230, Wd * .4), pr = 80, H = rows.length * rh + 8, mx = nice(Math.max(...rows.map(r => r.parts.reduce((a, b) => a + Math.max(0, b), 0)), 1)), sc = (Wd - pl - pr) / mx;
+  let s = `<svg viewBox="0 0 ${Wd} ${H}" width="100%" role="img">`; rows.forEach((r, i) => { const y = i * rh + 4; let x = pl; const tot = r.parts.reduce((a, b) => a + Math.max(0, b), 0);
+    s += `<text x="${pl - 8}" y="${y + 15}" text-anchor="end">${esc(r.label)}</text>`;
+    r.parts.forEach((v, j) => { v = Math.max(0, v); const w = v * sc; if (!w) return; const last = r.parts.slice(j + 1).every(q => q <= 0), gw = last ? w : Math.max(0, w - 2);
+      s += `<g data-tip="${esc('<b>' + eur(v) + '</b>' + (colors[j].name || '') + ' · ' + r.label)}"><path d="${last ? bar(x, y + 4, gw, 14, 4, 'right') : `M${x},${y + 4}h${gw}v14h${-gw}z`}" fill="${colors[j].c}"/></g>`; x += w; });
+    s += `<text class="val" x="${pl + tot * sc + 6}" y="${y + 16}">${eur(tot)}</text>`; }); el.innerHTML = s + '</svg>'; bind(el); }
+// ---------------------------------------------------------------- panelen
+const PROF = {voorzichtig: {rate: +0.005, stress: 0.075, sale: -0.10, maint: 1.0, spend: 400, hcf: 1.25, overrun: 30, uitleg: 'Tegenvallers: hogere rente, lagere verkoopprijs, 30% uitloop, uitgaven hoger dan begroot.'},
+  realistisch: {rate: 0, stress: 0.065, sale: 0, maint: 0.6, spend: 150, hcf: 1.0, overrun: 15, uitleg: 'Middenwaarden.'},
+  optimistisch: {rate: -0.003, stress: 0.055, sale: +0.07, maint: 0.4, spend: -200, hcf: 0.9, overrun: 0, uitleg: 'Meevallers: lagere rente, hogere verkoopprijs, geen uitloop, deels besparingen.'}};
+let profile = 'realistisch';
+function ctl(id, label, min, max, step, val){ return `<div class="ctl"><label for="${id}">${label} <b id="v_${id}"></b></label><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${val}"></div>`; }
+$('ctlPersons').innerHTML = P.map(p => ctl('g_' + p.id, esc(p.naam) + ' – bruto/jaar', Math.round(p.bruto_jaar_incl_vakantiegeld * 0.5 / 1000) * 1000, Math.round(p.bruto_jaar_incl_vakantiegeld * 1.6 / 1000) * 1000, 500, p.bruto_jaar_incl_vakantiegeld)
+  + ctl('h_' + p.id, esc(p.naam) + ' – uren/week', 0, p.contracturen || 40, 2, p.uren ?? p.contracturen)).join('');
+$('ctlKids').innerHTML = KIDS.length ? '<h3>Kinderopvang (dagen/week)</h3>' + KIDS.map((c, i) => ctl('d_' + i, esc(c.naam), 0, 5, 1, c.dagen_per_week || 0)).join('') : '';
+const R0 = G.rente || 0.042;
+$('ctlHouse').innerHTML = house ? '<h3>Nieuwe woning</h3>' + ctl('price', 'Koopsom', Math.round(G.koopsom * 0.6 / 5000) * 5000, Math.round(G.koopsom * 1.5 / 5000) * 5000, 5000, G.koopsom)
+  + ctl('reno', 'Verbouwing', 0, Math.max(100000, (G.verbouwing || 0) * 2), 5000, G.verbouwing || 0) + ctl('rate', 'Hypotheekrente %', 2.5, 7, 0.05, (R0 * 100).toFixed(2))
+  + `<div class="ctl"><label>Rentevast <b id="vFix"></b></label><div class="btns" data-for="fix"><button data-v="5">5 jr</button><button data-v="10">10 jr</button><button data-v="20">20 jr</button><button data-v="30">30 jr</button></div><input type="hidden" id="fix" value="${G.rentevast_jaren || 10}"></div>`
+  + ctl('own', 'Eigen inbreng', 0, 1000000, 5000, G.eigen_inbreng || 0) + (W.type === 'koop' ? ctl('sale', 'Verkoopprijs huidige woning', Math.round((W.marktwaarde || W.woz) * 0.7 / 5000) * 5000, Math.round((W.marktwaarde || W.woz) * 1.4 / 5000) * 5000, 5000, W.marktwaarde || W.woz) : '')
+  + ctl('fam', 'Familielening', 0, 300000, 5000, 0) + ctl('famRate', 'Rente familielening %', 0, 5, 0.1, 1) + ctl('stress', 'Rente na rentevaste periode %', 3, 9, 0.25, 6.5)
+  + ctl('maint', 'Onderhoud per jaar %', 0.3, 1.2, 0.1, 0.6) + ctl('overrun', 'Uitloop verbouwing %', 0, 50, 5, 15) + ctl('hcf', 'Overige woonlasten ×', 0.8, 1.5, 0.05, 1)
+  + `<div class="chk"><input type="checkbox" id="starter" ${G.starter ? 'checked' : ''}><label for="starter">Startersvrijstelling overdrachtsbelasting</label></div>` : '';
+const v = id => $(id) ? parseFloat($(id).value) : null;
+function state(){ return { year: +$('year').value, gross: Object.fromEntries(P.map(p => [p.id, v('g_' + p.id)])), hours: Object.fromEntries(P.map(p => [p.id, v('h_' + p.id)])),
+  days: KIDS.map((c, i) => v('d_' + i)), price: v('price') ?? 0, reno: v('reno') ?? 0, rate: (v('rate') ?? R0 * 100) / 100, fixYears: +($('fix')?.value || 10), ownFunds: v('own') ?? 0,
+  saleValue: v('sale') ?? 0, famLoan: v('fam') ?? 0, famRate: (v('famRate') ?? 0) / 100, stressRate: (v('stress') ?? 6.5) / 100, maintPct: (v('maint') ?? 0.6) / 100,
+  renoOverrun: (v('overrun') ?? 0) / 100, houseCostFactor: v('hcf') ?? 1, starter: $('starter')?.checked, spendAdj: v('spend'), bufferBuild: v('buf'), costsOther: 7500, label: 'C', useInvest: true, phase: 'nu' }; }
+function labels(sc){ for (const p of P) { $('v_g_' + p.id).textContent = k(sc.gross[p.id]); $('v_h_' + p.id).textContent = sc.hours[p.id] + ' u'; }
+  KIDS.forEach((c, i) => $('v_d_' + i).textContent = sc.days[i]); $('vYear').textContent = sc.year; $('v_spend') ; $('vSpend').textContent = (sc.spendAdj > 0 ? '+' : '') + eur(sc.spendAdj); $('vBuf').textContent = eur(sc.bufferBuild);
+  if (house) { $('v_price').textContent = k(sc.price); $('v_reno').textContent = k(sc.reno); $('v_rate').textContent = pct(sc.rate, 2); $('vFix').textContent = sc.fixYears + ' jr'; $('v_own').textContent = k(sc.ownFunds);
+    if ($('sale')) $('v_sale').textContent = k(sc.saleValue); $('v_fam').textContent = sc.famLoan ? k(sc.famLoan) : 'geen'; $('v_famRate').textContent = pct(sc.famRate, 1); $('v_stress').textContent = pct(sc.stressRate, 2);
+    $('v_maint').textContent = pct(sc.maintPct, 1); $('v_overrun').textContent = pct(sc.renoOverrun); $('v_hcf').textContent = '×' + sc.houseCostFactor.toLocaleString('nl-NL'); }
+  document.querySelectorAll('.btns[data-for]').forEach(b => b.querySelectorAll('button').forEach(x => x.classList.toggle('on', x.dataset.v === String($(b.dataset.for).value))));
+  document.querySelectorAll('#profiles button').forEach(b => b.classList.toggle('on', b.dataset.p === profile)); $('phint').textContent = profile ? PROF[profile].uitleg : 'Eigen instelling.'; }
+function applyProfile(name){ const p = PROF[name]; profile = name; $('spend').value = p.spend; if (house) { $('rate').value = ((R0 + p.rate) * 100).toFixed(2); $('stress').value = p.stress * 100; $('maint').value = p.maint; $('hcf').value = p.hcf; $('overrun').value = p.overrun; if ($('sale')) $('sale').value = Math.round((W.marktwaarde || W.woz) * (1 + p.sale) / 5000) * 5000; } }
+function profSc(sc, name){ const p = PROF[name]; return {...sc, rate: R0 + p.rate, stressRate: p.stress, maintPct: p.maint / 100, houseCostFactor: p.hcf, renoOverrun: p.overrun / 100, spendAdj: p.spend, saleValue: (W.marktwaarde || W.woz || 0) * (1 + p.sale)}; }
+// ---------------------------------------------------------------- statisch
+const name = cfg.huishouden.naam || 'ons huishouden'; $('title').textContent = 'Financieel overzicht ' + name; document.title = 'Financieel overzicht';
+$('sub').textContent = `Data ${A.periode.start} t/m ${A.periode.eind} (${A.periode.maanden} mnd) · schuifjes rekenen live door`;
+$('nav').innerHTML = [['samenvatting', 'Samenvatting'], ['h1', '1 Inkomsten & uitgaven'], ['h2', '2 Gezamenlijk'], ...(house ? [['h3', '3 Nieuwe woning']] : []), ['zek', 'Hoe zeker?'], ['h4', "4 Scenario's"], ['h5', '5 Opvallend'], ['bijlage', 'Bijlage']].map(([i, t]) => `<a href="#${i}">${t}</a>`).join('');
+if (!house) { $('h3').style.display = 'none'; } if (P.length !== 2) $('keysWrap').style.display = 'none';
+$('nSamen').innerHTML = N.samenvatting || ''; $('nH1').innerHTML = N.h1 || ''; $('nH2').innerHTML = N.h2 || ''; $('nH3').innerHTML = N.h3 || ''; $('nAann').innerHTML = N.aannames || '';
+$('fnd').innerHTML = (N.h5 || []).map(f => `<li>${flag(f.niveau || 'info', {bad: 'belangrijk', warn: 'actie', good: 'goed', info: 'let op'}[f.niveau || 'info'])} <b>${esc(f.titel)}</b><div class="sec">${f.tekst || ''}</div></li>`).join('') || '<li class="muted">Nog geen bevindingen ingevuld (work/narrative.json → h5).</li>';
+$('chk').textContent = checks || ''; $('src').innerHTML = Object.entries(rules._meta.bronnen).map(([kk, u]) => `<li><a href="${esc(u)}">${esc(kk)}</a></li>`).join('');
+const H = A.history, cats = Object.keys(H.categories), ml = H.months.map(m => ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'][+m.slice(5) - 1] + ' ' + m.slice(2, 4));
+const saldo = H.months.map((m, i) => cats.reduce((a, c) => a + H.categories[c][i], 0));
+const S = A.sparen;
+$('t1').innerHTML = [['Inkomsten', eur(S.inkomsten), 'netto ontvangen in de periode'], ['Uitgaven', eur(S.uitgaven), 'excl. interne overboekingen'], ['Mogelijk eenmalig binnen', eur(S.eenmalig_mogelijk), 'giften, teruggaven, refunds'], ['Structureel over', eur(S.structureel_m) + '/mnd', pct(S.structureel / Math.max(1, S.inkomsten), 1) + ' van het inkomen']].map(([l, val, d]) => `<div class="tile"><div class="l">${l}</div><div class="v">${val}</div><div class="d">${d}</div></div>`).join('');
+let tc = '<table><thead><tr><th>Categorie</th>' + ml.map(m => `<th class="n">${m}</th>`).join('') + '<th class="n">Gem.</th></tr></thead><tbody>';
+for (const c of cats) tc += `<tr><td>${esc(c)}</td>` + H.categories[c].map(x => `<td class="n">${nf.format(x)}</td>`).join('') + `<td class="n">${nf.format(H.categories[c].reduce((a, b) => a + b, 0) / H.months.length)}</td></tr>`;
+$('tCat').innerHTML = tc + '</tbody></table>';
+$('tRec').innerHTML = '<table><thead><tr><th>Tegenpartij</th><th>Categorie</th><th class="n">Gem./mnd</th><th class="n">Maanden</th><th></th></tr></thead><tbody>' + (A.terugkerend || []).slice(0, 25).map(r => `<tr><td>${esc(r.tegenpartij)}</td><td class="sec">${esc(r.categorie)}</td><td class="n">${eur(r.gem_m)}</td><td class="n">${r.maanden}</td><td>${r.mogelijk_dubbel ? flag('warn', 'vaak 2× per maand') : ''}</td></tr>`).join('') + '</tbody></table>';
+function staticCharts(){ cols($('cSaldo'), ml, saldo, i => `<b>${eur(saldo[i])}</b>${ml[i]}`);
+  const exp = cats.filter(c => c !== 'Inkomen').map(c => ({label: c, v: -H.categories[c].reduce((a, b) => a + b, 0) / H.months.length})).filter(r => r.v > 10).sort((a, b) => b.v - a.v);
+  hbars($('cCats'), exp.map(r => ({label: r.label, parts: [r.v]})), [{c: 'var(--c1)', name: 'per maand'}]); }
+// ---------------------------------------------------------------- live
+function render(){
+  const sc = state(); labels(sc);
+  const now = M.free(sc, 'nu'), nw = house ? M.free(sc, 'nieuw') : null, h = now.h, b = now.b;
+  $('kpis').innerHTML = [['Netto inkomen samen', eur(h.netTotal_m), 'per maand, excl. toeslagen'], ['Gezamenlijk nodig', eur(b.need), 'na toeslagen en kinderbijslag'], ['Over na alles (nu)', eur(b.free), 'na alle begrote uitgaven'],
+    ...(house ? [['Max. te lenen', k(nw.X.capacity), 'woonquote ' + pct(nw.X.max.pct, 1)], ['Over met nieuwe woning', eur(nw.free), nw.X.ok ? 'financierbaar' : 'niet financierbaar']] : [])]
+    .map(([l, val, d]) => `<div class="tile"><div class="l">${l}</div><div class="v">${val}</div><div class="d">${d}</div></div>`).join('');
+  // begroting
+  const gr = {}; for (const l of b.lines) if (l.scope === 'gez') (gr[l.groep] ||= []).push(l);
+  let t = '<table><thead><tr><th>Post</th><th class="n">Per maand</th></tr></thead><tbody>';
+  for (const [g, ls] of Object.entries(gr)) { t += `<tr class="grp"><td>${esc(g)}</td><td class="n">${eur(ls.reduce((a, l) => a + l.bedrag, 0))}</td></tr>`; for (const l of ls) t += `<tr><td style="padding-left:18px">${esc(l.naam)} ${unc(l.zeker)}</td><td class="n">${eur(l.bedrag)}</td></tr>`; }
+  t += `<tr class="sum"><td>Totaal kosten</td><td class="n">${eur(b.gez)}</td></tr>` + b.inc.map(i => `<tr><td>− ${esc(i.naam)}</td><td class="n">−${eur(i.bedrag)}</td></tr>`).join('') + `<tr><td>+ Buffer-opbouw</td><td class="n">${eur(sc.bufferBuild)}</td></tr><tr class="sum"><td>Inleg nodig uit inkomen</td><td class="n">${eur(b.need)}</td></tr>`;
+  const ip = A.gezamenlijk.inleg_per_persoon_m; t += `<tr><td class="sec">Ter vergelijking: inleg afgelopen periode (${Object.entries(ip).map(([n, x]) => esc(n) + ' ' + eur(x)).join(', ')})</td><td class="n sec">${eur(Object.values(ip).reduce((a, x) => a + x, 0))}</td></tr>`;
+  $('tBud').innerHTML = t + '</tbody></table>';
+  const K = M.keys(sc, h, b);
+  if (K.length) { $('kLeg').innerHTML = P.map((p, i) => `<span><i style="background:var(--c${i + 1})"></i>${esc(p.naam)} stort</span>`).join('');
+    hbars($('cKeys'), K.map(x => ({label: x.name, parts: [x.dA, x.dC]})), [{c: 'var(--c1)', name: P[0].naam}, {c: 'var(--c2)', name: P[1].naam}]);
+    $('tKeys').innerHTML = `<table><thead><tr><th>Sleutel</th><th class="n">${esc(P[0].naam)} / ${esc(P[1].naam)}</th><th class="n">${esc(P[0].naam)} stort</th><th class="n">${esc(P[1].naam)} stort</th><th class="n">${esc(P[0].naam)} houdt over</th><th class="n">${esc(P[1].naam)} houdt over</th></tr></thead><tbody>`
+      + K.map(x => `<tr><td>${esc(x.name)}<div class="muted" style="font-size:12px">${esc(x.uitleg)}</div></td><td class="n">${pct(x.share)} / ${pct(1 - x.share)}</td><td class="n">${eur(x.dA)}</td><td class="n">${eur(x.dC)}</td><td class="n">${eur(x.leftA)}</td><td class="n">${eur(x.leftC)}</td></tr>`).join('') + '</tbody></table><p class="muted" style="font-size:12px">Houdt over = netto − inleg − eigen vaste lasten; daar gaan nog eigen gewone uitgaven af.</p>'; }
+  // woning
+  if (house) { const X = nw.X, minOwn = Math.max(0, X.total - X.capacity);
+    $('t3').innerHTML = [['Totale investering', k(X.total), 'incl. kosten koper + verbouwing'], ['Benodigde lening', k(X.loan), X.famLoan ? 'waarvan familie ' + k(X.famLoan) : ''], ['Maximaal te lenen', k(X.capacity), 'toetsinkomen ' + k(X.max.ti)], ['Minimale eigen inbreng', k(minOwn), 'beschikbaar ' + k(X.available)], ['Buffer na aankoop', k(X.buffer), 'incl. uitloop verbouwing']].map(([l, val, d]) => `<div class="tile"><div class="l">${l}</div><div class="v">${val}</div><div class="d">${d}</div></div>`).join('');
+    $('st3').innerHTML = [X.ok ? flag('good', 'binnen de leennorm') : flag('bad', 'boven de leennorm'), X.ownFunds <= X.available ? flag('good', 'eigen inbreng beschikbaar') : flag('bad', 'eigen inbreng te hoog'), X.buffer >= 25000 ? flag('good', 'buffer ≥ €25k') : flag('bad', 'buffer te klein'), X.deductible < X.loan ? flag('warn', 'deel lening niet aftrekbaar (bijleenregeling)') : ''].join(' ');
+    $('tFin').innerHTML = `<table><tbody><tr><td>Koopsom</td><td class="n">${eur(sc.price)}</td></tr><tr><td>Kosten koper (overdrachtsbelasting ${sc.starter ? '0%' : '2%'} + ~€7.500)</td><td class="n">${eur(X.kk)}</td></tr><tr><td>Verbouwing</td><td class="n">${eur(sc.reno)}</td></tr><tr class="sum"><td>Totaal</td><td class="n">${eur(X.total)}</td></tr><tr><td>− Eigen inbreng</td><td class="n">−${eur(X.ownFunds)}</td></tr><tr class="sum"><td>Lening</td><td class="n">${eur(X.loan)}</td></tr><tr><td class="sec">Bruto maandlast / netto na renteaftrek</td><td class="n">${eur(X.gross_m)} / ${eur(X.net_m)}</td></tr><tr><td class="sec">Overwaarde huidige woning (eigenwoningreserve)</td><td class="n">${eur(X.equity)}</td></tr></tbody></table>`;
+    const nb = nw.b; $('tNew').innerHTML = `<table><thead><tr><th></th><th class="n">Nu</th><th class="n">Nieuwe woning</th></tr></thead><tbody><tr><td>Netto inkomen</td><td class="n">${eur(h.netTotal_m)}</td><td class="n">${eur(nw.h.netTotal_m)}</td></tr><tr><td>Gezamenlijke kosten (bruto)</td><td class="n">${eur(b.gez)}</td><td class="n">${eur(nb.gez)}</td></tr><tr><td>− toeslagen, kinderbijslag, renteaftrek</td><td class="n">${eur(b.incSum)}</td><td class="n">${eur(nb.incSum)}</td></tr><tr><td>Inleg nodig</td><td class="n">${eur(b.need)}</td><td class="n">${eur(nb.need)}</td></tr><tr class="sum"><td>Over na alles</td><td class="n">${eur(b.free)}</td><td class="n">${eur(nb.free)}</td></tr></tbody></table>`;
+    const need = nb.need + Object.values(nb.fixed).reduce((a, x) => a + x, 0);
+    const shock = P.map(p => { const s2 = {...sc, hours: {...sc.hours, [p.id]: 0}}; const h2 = M.household(s2, X.ewSaldo); const ww = Math.min(78300, h.pp[p.id].gross) * 0.7; const wwNet = ww - Math.max(0, M.ib(sc.year, ww, 0, false)); return [p.naam, h2.netTotal_m + wwNet / 12]; });
+    $('tStress').innerHTML = `<table><thead><tr><th>Situatie</th><th class="n">Inkomen/mnd</th><th class="n">Nodig/mnd</th><th class="n">Gat</th><th>Buffer houdt het</th></tr></thead><tbody><tr><td>Rente na ${sc.fixYears} jr naar ${pct(sc.stressRate, 1)}</td><td class="n">${eur(nw.h.netTotal_m)}</td><td class="n">${eur(need + X.stress_net_m - X.net_m)}</td><td class="n">${eur(Math.min(0, nw.h.netTotal_m - need - (X.stress_net_m - X.net_m)))}</td><td class="sec">structureel +${eur(X.stress_net_m - X.net_m)}/mnd</td></tr>`
+      + shock.map(([n, inc]) => `<tr><td>${esc(n)} werkloos (WW ~70%, max ~€78k)</td><td class="n">${eur(inc)}</td><td class="n">${eur(need)}</td><td class="n">${eur(Math.min(0, inc - need))}</td><td>${inc >= need ? 'geen gat' : '~' + nf.format(X.buffer / (need - inc)) + ' mnd'}</td></tr>`).join('') + '</tbody></table><p class="muted" style="font-size:12px">Nodig = gezamenlijke kosten na toeslagen + eigen vaste lasten. WW-bedragen zijn benaderingen; bij arbeidsongeschiktheid boven het max dagloon is extra verzekering nodig.</p>'; }
+  // profielen
+  const prow = ['voorzichtig', 'realistisch', 'optimistisch'].map(n => { const s2 = profSc(sc, n); const a = M.free(s2, 'nu'), c = house ? M.free(s2, 'nieuw') : null; return [n, a, c]; });
+  $('tProf').innerHTML = `<table><thead><tr><th></th>${prow.map(([n]) => `<th class="n">${n[0].toUpperCase() + n.slice(1)}</th>`).join('')}</tr></thead><tbody><tr><td>Over per maand nu</td>${prow.map(([, a]) => `<td class="n">${eur(a.free)}</td>`).join('')}</tr>`
+    + (house ? `<tr><td>Max. te lenen</td>${prow.map(([, , c]) => `<td class="n">${k(c.X.capacity)}</td>`).join('')}</tr><tr><td>Buffer na aankoop</td>${prow.map(([, , c]) => `<td class="n">${k(c.X.buffer)}</td>`).join('')}</tr><tr><td>Over met nieuwe woning</td>${prow.map(([, , c]) => `<td class="n">${c.free < 0 ? flag('bad', eur(c.free)) : eur(c.free)}</td>`).join('')}</tr><tr><td>Financierbaar?</td>${prow.map(([, , c]) => `<td class="n">${c.X.ok ? flag('good', 'ja') : flag('bad', 'nee')}</td>`).join('')}</tr>` : '') + '</tbody></table>';
+  // scenario's
+  const pB = P[P.length - 1], pA = P[0];
+  const combos = []; for (const f of [0, 0.5, 0.75, 1]) for (const g of [1, 1.2]) combos.push([f, g]);
+  $('tScen').innerHTML = `<table><thead><tr><th>${esc(pB.naam)} uren</th><th>${esc(pA.naam)} salaris</th><th class="n">Netto samen</th><th class="n">Opvang netto</th><th class="n">Over nu</th>${house ? '<th class="n">Max. lening</th><th class="n">Over nieuwe woning</th>' : ''}</tr></thead><tbody>`
+    + combos.map(([f, g]) => { const s2 = {...sc, hours: {...sc.hours, [pB.id]: Math.round((pB.contracturen || 40) * f)}, gross: {...sc.gross, [pA.id]: sc.gross[pA.id] * g}}; const a = M.free(s2, 'nu'), c = house ? M.free(s2, 'nieuw') : null;
+      return `<tr><td>${Math.round((pB.contracturen || 40) * f)} u</td><td>${g === 1 ? 'huidig' : '+20%'} (${k(s2.gross[pA.id])})</td><td class="n">${eur(a.h.netTotal_m)}</td><td class="n">${eur(a.h.ko.net_m)}${a.h.allWork ? '' : ' ' + flag('bad', 'geen toeslag')}</td><td class="n">${eur(a.free)}</td>${house ? `<td class="n">${k(c.X.capacity)}${c.X.ok ? '' : ' ✕'}</td><td class="n">${eur(c.free)}</td>` : ''}</tr>`; }).join('') + '</tbody></table>';
+}
+document.querySelectorAll('input').forEach(el => el.addEventListener('input', () => { if (['spend', 'rate', 'stress', 'maint', 'hcf', 'overrun', 'sale'].includes(el.id)) profile = null; render(); }));
+document.querySelectorAll('.btns[data-for]').forEach(bx => bx.addEventListener('click', e => { const x = e.target.closest('button'); if (!x) return; $(bx.dataset.for).value = x.dataset.v; render(); }));
+$('profiles').addEventListener('click', e => { const x = e.target.closest('button'); if (!x) return; applyProfile(x.dataset.p); render(); });
+$('theme').addEventListener('click', () => { const cur = document.documentElement.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark'); });
+if (matchMedia('(max-width: 960px)').matches) $('pd').open = false;
+applyProfile('realistisch'); staticCharts(); render(); addEventListener('resize', () => { staticCharts(); render(); });
+})();
+</script>
+</body>
+</html>

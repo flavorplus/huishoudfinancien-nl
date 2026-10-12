@@ -1,0 +1,62 @@
+{
+  "_uitleg": "Voorbeeldconfiguratie. Kopieer naar <werkmap>/config/huishouden.json en vul in tijdens de intake. Bedragen in euro's. Velden die je niet weet: laat null; het model gebruikt dan een aanname en markeert die.",
+  "huishouden": {
+    "naam": "Familie Voorbeeld",
+    "fiscaal_partners": true,
+    "personen": [
+      {
+        "id": "p1",
+        "naam": "Alex",
+        "geboortejaar": 1990,
+        "bruto_jaar_incl_vakantiegeld": 75000,
+        "contracturen": 40,
+        "uren": 40,
+        "pensioenpremie_werknemer_pct": 0.06,
+        "pensioen_franchise": 19000,
+        "netto_maand_loonstrook": null,
+        "vast_contract": true
+      },
+      {
+        "id": "p2",
+        "naam": "Sam",
+        "geboortejaar": 1991,
+        "bruto_jaar_incl_vakantiegeld": 52000,
+        "contracturen": 36,
+        "uren": 32,
+        "pensioenpremie_werknemer_pct": 0.08,
+        "pensioen_franchise": 19000,
+        "netto_maand_loonstrook": null,
+        "vast_contract": true
+      }
+    ],
+    "kinderen": [
+      {"naam": "Kind 1", "geboortedatum": "2023-05-01", "opvang": "dagopvang", "dagen_per_week": 2, "uren_per_dag": 10, "uurtarief": 11.8}
+    ],
+    "studieschuld_maand": 0
+  },
+  "rekeningen": [
+    {"iban": "NL00INGB0000000001", "naam": "Betaalrekening Alex", "eigenaar": "p1"},
+    {"iban": "NL00RABO0000000002", "naam": "Betaalrekening Sam", "eigenaar": "p2"},
+    {"iban": "NL00ABNA0000000003", "naam": "Gezamenlijke rekening", "eigenaar": "gezamenlijk"},
+    {"iban": "NL00INGB0000000004", "naam": "Spaarrekening", "eigenaar": "gezamenlijk", "soort": "spaar"}
+  ],
+  "eigen_ibans_extra": [],
+  "woning": {
+    "type": "koop",
+    "woz": 400000,
+    "marktwaarde": 425000,
+    "hypotheken": [
+      {"schuld": 280000, "rente": 0.032, "maandlast": 1250, "rentevast_tot": "2031-01-01", "box": 1}
+    ],
+    "huur_maand": null,
+    "vve_maand": 0
+  },
+  "vermogen": {"spaargeld": null, "beleggingen": null, "_noot": "wordt grotendeels uit de saldi gehaald; vul aan wat niet in de exports staat"},
+  "doelen": {
+    "inzicht_uitgaven": true,
+    "inleg_gezamenlijk": true,
+    "nieuwe_woning": {"actief": true, "koopsom": 550000, "verbouwing": 30000, "eigen_inbreng": 80000, "rente": 0.042, "rentevast_jaren": 10},
+    "scenarios": ["uren partner", "salaris", "kinderopvang dagen", "woningprijs/rente/eigen inbreng"]
+  },
+  "periode": {"start": null, "eind": null, "_noot": "null = automatisch de laatste 12 volle maanden in de data"}
+}
