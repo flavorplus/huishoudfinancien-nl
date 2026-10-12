@@ -138,6 +138,9 @@ Begin met: "Fase 2 is rekenwerk en onderzoek. Zet de redeneerinspanning hoog als
 
 - **Claude Code (lokaal):** het fijnst. De data blijft op de computer en je kunt het rapport in de browser
   controleren.
+- **OpenAI Codex (CLI/IDE/app):** werkt ook lokaal en gebruikt hetzelfde skillformaat. Zie
+  `references/codex.md` voor installatie (`~/.agents/skills/`), Python-pakketten (vooraf installeren, omdat de
+  sandbox vaak geen internet heeft) en webzoeken voor fase 2.
 - **Claude.ai of ChatGPT:** upload de skillmap als zip; de gebruiker uploadt de exports. Zie
   `references/chatgpt.md` voor het instellen van een eigen GPT of Project, en de beperkingen (geen Node,
   soms ontbrekende pakketten, bestanden verdwijnen na de sessie, dus laat ze tussendoor downloaden).
@@ -149,3 +152,4 @@ Begin met: "Fase 2 is rekenwerk en onderzoek. Zet de redeneerinspanning hoog als
 - `references/regels.md`: wat je per jaar controleert, waar, en hoe je `nl_regels.json` bijwerkt
 - `references/rapport.md`: structuur, schrijfwijze, `narrative.json`, `begroting_aanpassingen`, checklist opvallende zaken
 - `references/chatgpt.md`: gebruik in ChatGPT (eigen GPT / Project)
+- `references/codex.md`: gebruik in OpenAI Codex

@@ -20,6 +20,13 @@ Werkt met exports van **ING, Rabobank, ABN AMRO** (en bunq, Amex, of elk CSV-for
 **Claude.ai**: Instellingen → Mogelijkheden → Skills → upload `huishoudfinancien-nl.skill` (of de zip).
 Zet code-uitvoering aan.
 
+**OpenAI Codex** (CLI, IDE of app; draait lokaal): zie `references/codex.md`. Kort:
+```bash
+git clone https://github.com/flavorplus/huishoudfinancien-nl ~/.agents/skills/huishoudfinancien-nl
+python3 -m pip install --user pandas openpyxl pdfplumber tabulate
+```
+Start Codex daarna in een lege map met je exports in `data/` en stel je vraag, of typ `$huishoudfinancien-nl`.
+
 **ChatGPT**: zie `references/chatgpt.md`. Kort: maak een eigen GPT, plak `CHATGPT-INSTRUCTIES.md` bij
 Instructies, upload `huishoudfinancien-nl.zip` bij Kennis, en zet Code Interpreter en Zoeken aan.
 

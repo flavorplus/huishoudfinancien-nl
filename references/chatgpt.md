@@ -5,6 +5,10 @@ code-uitvoering, of ChatGPT met "Code Interpreter / Data-analyse". Het rapport r
 gebruiker, dus daar is geen Node nodig.
 
 ## Eenmalig instellen in ChatGPT
+> Nieuwere versies van ChatGPT hebben ook **Skills** in de zijbalk (aanroepen met `@`). Zie je die optie, dan
+> kun je proberen deze map als skill toe te voegen. Werkt dat niet of zie je de optie niet, gebruik dan een
+> eigen GPT zoals hieronder.
+
 **Optie A – eigen GPT (te delen met vrienden)**
 1. ChatGPT → **Verkennen / GPT's** → **Maken** → **Configureren**.
 2. Naam: "Huishoudfinanciën NL". Plak bij **Instructies** de inhoud van `CHATGPT-INSTRUCTIES.md` (uit de zip).
